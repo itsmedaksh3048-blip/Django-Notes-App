@@ -35,3 +35,12 @@ Install Nginx reverse proxy to make this application available
 
 `sudo apt-get update`
 `sudo apt install nginx`
+
+
+---
+
+## 🙏 Credits & Acknowledgments
+
+This project is built upon the open-source repository by **Shubham Londhe** and the TWS community.
+- **Original Repository:** [django-notes-app](https://github.com/LondheShubham153/django-notes-app)
+- Special thanks to the original creator for the foundational architecture.
