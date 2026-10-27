@@ -40,6 +40,8 @@ pipeline {
             steps {
                 sh 'docker compose down --remove-orphans || true'
                 sh 'docker compose up --build -d'
+                sh 'docker ps'
+                echo "deploy your application"
             }
         }
     }
