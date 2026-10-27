@@ -1,41 +1,46 @@
-@Library('Shared')_
+@Library("shaed") _
 pipeline {
-    agent { label 'dev-server' }
-
-    triggers {
-        githubPush()
-    }
-
+    agent { label 'Daksh' }
     stages {
-        stage("Code clone") {
-            steps {
-                sh "whoami"
-                clone("https://github.com/itsmedaksh3048-blip/Django_Notes_App.git", "main")
+        stage("hello"){
+            steps{
+                script{
+                    hello()
+                }
             }
         }
-        stage("Code Build") {
+        stage('Clean old data') {
             steps {
-                dockerbuild("notes-app", "latest")
+                sh 'docker compose down --remove-orphans || true'
+                sh 'sudo rm -rf data || true'
             }
         }
-        stage("Push to DockerHub") {
+        stage('Code clone') {
             steps {
-                dockerpush("dockerHubCreds", "notes-app", "latest")
+                script{
+                    clone("https://github.com/itsmedaksh3048-blip/Django-Notes-App.git","main")
+                }
             }
         }
-        stage("Deploy") {
+        stage('Code Build') {
             steps {
-                deploy()
+                script{
+                    build("notes-app","latest","itsmedaksh3048")
+                }
             }
         }
-    }
-
-    post {
-        success {
-            echo "Build and deploy succeeded"
+        stage('Push to DockerHub') {
+            steps {
+                script{
+                    push("notes-app","latest","itsmedaksh3048") 
+                }
+            }
         }
-        failure {
-            echo "Build failed, check the stage logs above"
+        stage('Deploy') {
+            steps {
+                sh 'docker compose down --remove-orphans || true'
+                sh 'docker compose up --build -d'
+            }
         }
     }
 }
